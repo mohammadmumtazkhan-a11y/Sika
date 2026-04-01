@@ -1,0 +1,112 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
+
+@theme {
+  /* Brand colours */
+  --color-primary: #1FAF5A;
+  --color-primary-dark: #178A47;
+  --color-brand-yellow: #F4B400;
+
+  /* Backgrounds */
+  --color-background: #F8FAF9;
+  --color-card: #FFFFFF;
+  --color-section-alt: #EEF7F1;
+
+  /* shadcn/ui semantic tokens — must be in @theme for utility classes to work in v4 */
+  --color-popover: #FFFFFF;
+  --color-popover-foreground: #1E2A24;
+  --color-accent: #EEF7F1;          /* hover state in dropdowns/menus */
+  --color-accent-foreground: #1E2A24;
+  --color-secondary: #EEF7F1;
+  --color-secondary-foreground: #1E2A24;
+  --color-muted-foreground: #5F6F68;
+  --color-input: #DCE3DF;
+  --color-ring: #1FAF5A;
+
+  /* Text */
+  --color-foreground: #1E2A24;
+  --color-muted: #5F6F68;
+  --color-placeholder: #9AA6A0;
+
+  /* Border / nav */
+  --color-border: #DCE3DF;
+  --color-nav-border: #E5ECE8;
+
+  /* Status */
+  --color-destructive: #E5484D;
+  --color-success: #1FAF5A;
+  --color-warning: #F4B400;
+  --color-info: #3B82F6;
+
+  /* Disabled */
+  --color-disabled-bg: #D3D9D6;
+  --color-disabled-fg: #8A9490;
+
+  /* Fonts */
+  --font-display: 'Plus Jakarta Sans', sans-serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+
+  /* Radius */
+  --radius-card: 12px;
+  --radius-btn: 8px;
+  --radius: 8px;
+}
+
+/* shadcn/ui HSL variable compatibility layer (used by older shadcn component patterns) */
+:root {
+  --background: 145 20% 97%;
+  --foreground: 155 20% 14%;
+  --card: 0 0% 100%;
+  --card-foreground: 155 20% 14%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 155 20% 14%;
+  --primary: 145 72% 40%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 145 30% 94%;
+  --secondary-foreground: 155 20% 14%;
+  --muted: 145 30% 94%;
+  --muted-foreground: 155 10% 43%;
+  --accent: 145 30% 94%;
+  --accent-foreground: 155 20% 14%;
+  --destructive: 358 75% 59%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 145 15% 88%;
+  --input: 145 15% 88%;
+  --ring: 145 72% 40%;
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: #F8FAF9;
+    color: #1E2A24;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #DCE3DF;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #5F6F68;
+  }
+}

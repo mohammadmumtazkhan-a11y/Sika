@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npx shadcn@latest add button input select toast separator label badge --yes)",
+      "Bash(npx shadcn@latest add button --yes)",
+      "Bash(npx shadcn@latest add input --yes)",
+      "Bash(npx shadcn@latest add select --yes)",
+      "Bash(npx shadcn@latest add sonner --yes)",
+      "Bash(npx shadcn@latest add separator --yes)",
+      "Bash(cp \"assets/Sika Logo.png\" \"client/src/assets/Sika Logo.png\")",
+      "Bash(cp \"assets/Mito_logo.svg\" \"client/src/assets/Mito_logo.svg\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5000/)",
+      "mcp__Desktop_Commander__read_file",
+      "mcp__Desktop_Commander__get_file_info"
+    ]
+  }
+}
