@@ -14,6 +14,21 @@ import SummaryPage from "@/pages/SummaryPage";
 import PaymentMethodsPage from "@/pages/PaymentMethodsPage";
 import PaymentPage from "@/pages/PaymentPage";
 
+/* ── Mobile App Imports ── */
+import MobileHome from "@/pages/MobileApp/MobileHome";
+import MobileLogin from "@/pages/MobileApp/MobileLogin";
+import MobileRegister from "@/pages/MobileApp/MobileRegister";
+import MobileVerifyEmail from "@/pages/MobileApp/MobileVerifyEmail";
+import MobileKYC from "@/pages/MobileApp/MobileKYC";
+import MobileDashboard from "@/pages/MobileApp/MobileDashboard";
+import MobileSendMoney from "@/pages/MobileApp/MobileSendMoney";
+import MobileSelectRecipient from "@/pages/MobileApp/MobileSelectRecipient";
+import MobileAddRecipient from "@/pages/MobileApp/MobileAddRecipient";
+import MobileBankDetails from "@/pages/MobileApp/MobileBankDetails";
+import MobileSummary from "@/pages/MobileApp/MobileSummary";
+import MobilePaymentMethods from "@/pages/MobileApp/MobilePaymentMethods";
+import MobilePayment from "@/pages/MobileApp/MobilePayment";
+
 function NotFound() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#F8FAF9]">
@@ -35,6 +50,22 @@ export default function App() {
   return (
     <>
       <Switch>
+        {/* ── Mobile App Routes ── */}
+        <Route path="/m/dashboard/send/recipient/new" component={MobileAddRecipient} />
+        <Route path="/m/dashboard/send/recipient" component={MobileSelectRecipient} />
+        <Route path="/m/dashboard/send/bank" component={MobileBankDetails} />
+        <Route path="/m/dashboard/send/summary" component={MobileSummary} />
+        <Route path="/m/dashboard/send/payment-methods" component={MobilePaymentMethods} />
+        <Route path="/m/dashboard/send/payment" component={MobilePayment} />
+        <Route path="/m/dashboard" component={MobileDashboard} />
+        <Route path="/m/send" component={MobileSendMoney} />
+        <Route path="/m/login" component={MobileLogin} />
+        <Route path="/m/register" component={MobileRegister} />
+        <Route path="/m/verify-email" component={MobileVerifyEmail} />
+        <Route path="/m/kyc" component={MobileKYC} />
+        <Route path="/m" component={MobileHome} />
+
+        {/* ── Web Routes ── */}
         <Route path="/" component={HomePage} />
         <Route path="/send" component={SendMoneyPage} />
         <Route path="/login" component={LoginPage} />
