@@ -13,6 +13,7 @@ interface MitoLayoutProps {
   currentStep?: number;
   title: string;
   subtitle?: string;
+  hideFooter?: boolean;
 }
 
 export default function MitoLayout({
@@ -21,6 +22,7 @@ export default function MitoLayout({
   currentStep,
   title,
   subtitle,
+  hideFooter,
 }: MitoLayoutProps) {
   const [, navigate] = useLocation();
 
@@ -115,7 +117,7 @@ export default function MitoLayout({
       </main>
 
       {/* ── Footer ────────────────────────────────────────── */}
-      <footer className="border-t border-[#E5ECE8] bg-white py-4">
+      {!hideFooter && <footer className="border-t border-[#E5ECE8] bg-white py-4">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2">
           <div className="flex items-center gap-2 text-xs text-[#9AA6A0]">
             <img src={mitoLogo} alt="Mito.Money" className="h-4 w-auto opacity-60" />
@@ -135,7 +137,7 @@ export default function MitoLayout({
             </div>
           </div>
         </div>
-      </footer>
+      </footer>}
     </div>
   );
 }

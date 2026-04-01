@@ -92,6 +92,7 @@ export default function VerifyEmailPage() {
       currentStep={2}
       title="Verify Your Email"
       subtitle="One step closer — check your inbox for the code"
+      hideFooter
     >
       <motion.div
         initial={{ opacity: 0, y: 24 }}
