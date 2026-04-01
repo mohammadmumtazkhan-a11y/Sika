@@ -286,7 +286,10 @@ export default function MobileSelectRecipient() {
           )}
         </div>
 
-        {/* Amount card */}
+      </div>
+
+      {/* ── Sticky footer: Amount card ────────────────────── */}
+      <div className="sticky bottom-0 left-0 right-0 z-40 bg-gradient-to-t from-[#F8FAF9] via-[#F8FAF9] to-[#F8FAF9]/80 pt-2 pb-[max(12px,env(safe-area-inset-bottom))]">
         <MobileAmountCard
           sendAmount={sendAmt}
           sendSymbol={sendCur.symbol}

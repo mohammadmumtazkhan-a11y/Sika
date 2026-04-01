@@ -257,18 +257,10 @@ export default function MobileSummary() {
           </p>
         </div>
 
-        {/* ── CTA button ─────────────────────────────────── */}
-        <Button
-          onClick={() => {
-            toast.success("Proceeding to payment...");
-            navigate(`/m/dashboard/send/payment-methods?${urlParams}`);
-          }}
-          className="w-full bg-[#1FAF5A] hover:bg-[#178A47] text-white font-bold py-3.5 h-12 rounded-[10px] text-base shadow-[0_4px_16px_rgba(31,175,90,0.3)]"
-        >
-          Continue to Payment <ArrowRight className="w-4 h-4 ml-1" />
-        </Button>
+      </div>
 
-        {/* Amount card */}
+      {/* ── Sticky footer: Amount card + CTA ─────────────── */}
+      <div className="sticky bottom-0 left-0 right-0 z-40 bg-gradient-to-t from-[#F8FAF9] via-[#F8FAF9] to-[#F8FAF9]/80 pt-2 pb-[max(12px,env(safe-area-inset-bottom))]">
         <MobileAmountCard
           sendAmount={sendAmt}
           sendSymbol={sendCur.symbol}
@@ -277,6 +269,17 @@ export default function MobileSummary() {
           recvCode={toCcy}
           totalFee={totalFee}
         />
+        <div className="px-4 pt-2">
+          <Button
+            onClick={() => {
+              toast.success("Proceeding to payment...");
+              navigate(`/m/dashboard/send/payment-methods?${urlParams}`);
+            }}
+            className="w-full bg-[#1FAF5A] hover:bg-[#178A47] text-white font-bold py-3.5 h-12 rounded-[10px] text-base shadow-[0_4px_16px_rgba(31,175,90,0.3)]"
+          >
+            Continue to Payment <ArrowRight className="w-4 h-4 ml-1" />
+          </Button>
+        </div>
       </div>
     </MobileLayout>
   );

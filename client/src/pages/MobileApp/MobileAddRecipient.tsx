@@ -321,19 +321,11 @@ export default function MobileAddRecipient() {
             </div>
           </div>
 
-          {/* Continue button */}
-          <Button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-[#1FAF5A] hover:bg-[#178A47] text-white font-bold py-3.5 h-12 rounded-[10px] text-base disabled:opacity-60 shadow-[0_4px_16px_rgba(31,175,90,0.3)]"
-          >
-            {loading ? "Saving..." : (
-              <>Continue <ArrowRight className="w-4 h-4 ml-1" /></>
-            )}
-          </Button>
         </form>
+      </div>
 
-        {/* Amount card */}
+      {/* ── Sticky footer: Amount card + CTA ─────────────── */}
+      <div className="sticky bottom-0 left-0 right-0 z-40 bg-gradient-to-t from-[#F8FAF9] via-[#F8FAF9] to-[#F8FAF9]/80 pt-2 pb-[max(12px,env(safe-area-inset-bottom))]">
         <MobileAmountCard
           sendAmount={sendAmt}
           sendSymbol={sendCur.symbol}
@@ -342,6 +334,18 @@ export default function MobileAddRecipient() {
           recvCode={toCcy}
           totalFee={totalFee}
         />
+        <div className="px-4 pt-2">
+          <Button
+            type="button"
+            onClick={() => document.querySelector<HTMLFormElement>("form")?.requestSubmit()}
+            disabled={loading || !form.firstName.trim() || !form.lastName.trim() || (isNGN && !form.narration.trim())}
+            className="w-full bg-[#1FAF5A] hover:bg-[#178A47] text-white font-bold py-3.5 h-12 rounded-[10px] text-base disabled:opacity-40 disabled:cursor-not-allowed shadow-[0_4px_16px_rgba(31,175,90,0.3)]"
+          >
+            {loading ? "Saving..." : (
+              <>Continue <ArrowRight className="w-4 h-4 ml-1" /></>
+            )}
+          </Button>
+        </div>
       </div>
     </MobileLayout>
   );
