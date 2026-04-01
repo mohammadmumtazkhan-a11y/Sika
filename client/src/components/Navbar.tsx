@@ -16,6 +16,11 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [, navigate] = useLocation();
 
+  // Hide auth buttons when user is logged in (either existing user or new user who registered)
+  const isLoggedIn =
+    sessionStorage.getItem("sika_kyc_done") === "1" ||
+    sessionStorage.getItem("sika_new_user") === "1";
+
   const handleNavClick = (href: string) => {
     setIsOpen(false);
     if (href.startsWith("#")) {
@@ -56,23 +61,25 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Desktop CTA buttons — matching reference: dark green with lock icon */}
-          <div className="hidden md:flex items-center gap-2">
-            <Button
-              onClick={() => navigate("/register")}
-              className="bg-[#178A47] hover:bg-[#0F6B36] text-white font-semibold px-4 h-9 rounded-[6px] transition-colors duration-200 text-sm flex items-center gap-1.5"
-            >
-              <Lock className="w-3.5 h-3.5" />
-              New Sign up
-            </Button>
-            <Button
-              onClick={() => navigate("/login")}
-              className="bg-[#178A47] hover:bg-[#0F6B36] text-white font-semibold px-4 h-9 rounded-[6px] transition-colors duration-200 text-sm flex items-center gap-1.5"
-            >
-              <Lock className="w-3.5 h-3.5" />
-              Login
-            </Button>
-          </div>
+          {/* Desktop CTA buttons — hidden when logged in */}
+          {!isLoggedIn && (
+            <div className="hidden md:flex items-center gap-2">
+              <Button
+                onClick={() => navigate("/register")}
+                className="bg-[#178A47] hover:bg-[#0F6B36] text-white font-semibold px-4 h-9 rounded-[6px] transition-colors duration-200 text-sm flex items-center gap-1.5"
+              >
+                <Lock className="w-3.5 h-3.5" />
+                New Sign up
+              </Button>
+              <Button
+                onClick={() => navigate("/login")}
+                className="bg-[#178A47] hover:bg-[#0F6B36] text-white font-semibold px-4 h-9 rounded-[6px] transition-colors duration-200 text-sm flex items-center gap-1.5"
+              >
+                <Lock className="w-3.5 h-3.5" />
+                Login
+              </Button>
+            </div>
+          )}
 
           {/* Mobile hamburger */}
           <button
@@ -105,22 +112,24 @@ export default function Navbar() {
                   {link.label}
                 </button>
               ))}
-              <div className={cn("flex gap-3 mt-3 pt-3 border-t border-[#E5ECE8]")}>
-                <Button
-                  onClick={() => { setIsOpen(false); navigate("/register"); }}
-                  className="flex-1 bg-[#178A47] hover:bg-[#0F6B36] text-white rounded-[6px] gap-1.5 text-sm"
-                >
-                  <Lock className="w-3.5 h-3.5" />
-                  New Sign up
-                </Button>
-                <Button
-                  onClick={() => { setIsOpen(false); navigate("/login"); }}
-                  className="flex-1 bg-[#178A47] hover:bg-[#0F6B36] text-white rounded-[6px] gap-1.5 text-sm"
-                >
-                  <Lock className="w-3.5 h-3.5" />
-                  Login
-                </Button>
-              </div>
+              {!isLoggedIn && (
+                <div className={cn("flex gap-3 mt-3 pt-3 border-t border-[#E5ECE8]")}>
+                  <Button
+                    onClick={() => { setIsOpen(false); navigate("/register"); }}
+                    className="flex-1 bg-[#178A47] hover:bg-[#0F6B36] text-white rounded-[6px] gap-1.5 text-sm"
+                  >
+                    <Lock className="w-3.5 h-3.5" />
+                    New Sign up
+                  </Button>
+                  <Button
+                    onClick={() => { setIsOpen(false); navigate("/login"); }}
+                    className="flex-1 bg-[#178A47] hover:bg-[#0F6B36] text-white rounded-[6px] gap-1.5 text-sm"
+                  >
+                    <Lock className="w-3.5 h-3.5" />
+                    Login
+                  </Button>
+                </div>
+              )}
             </div>
           </motion.div>
         )}
