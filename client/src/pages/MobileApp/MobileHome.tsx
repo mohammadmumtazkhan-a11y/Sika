@@ -42,7 +42,7 @@ export default function MobileHome() {
 
           {/* Logo + Auth buttons */}
           <div className="flex items-center justify-between mb-6">
-            <img src={sikaLogo} alt="SikaCash" className="h-9 w-auto brightness-0 invert" />
+            <img src={sikaLogo} alt="SikaCash" className="h-9 w-auto drop-shadow-[0_2px_8px_rgba(255,255,255,0.3)]" />
             {!isLoggedIn ? (
               <div className="flex gap-2">
                 <button onClick={() => navigate("/m/login")} className="text-white/70 text-xs font-semibold px-3 py-1.5 rounded-full border border-white/20 hover:bg-white/10 transition-colors">

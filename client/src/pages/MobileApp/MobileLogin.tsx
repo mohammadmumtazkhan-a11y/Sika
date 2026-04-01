@@ -38,7 +38,7 @@ export default function MobileLogin() {
         {/* Green header */}
         <div className="relative bg-gradient-to-br from-[#0B1F13] via-[#0F3A20] to-[#178A47]/80 px-6 pt-[max(20px,env(safe-area-inset-top))] pb-10 text-center overflow-hidden">
           <div className="absolute top-[-40px] right-[-40px] w-[160px] h-[160px] rounded-full bg-[#1FAF5A]/15 blur-3xl pointer-events-none" />
-          <img src={sikaLogo} alt="SikaCash" className="h-11 w-auto mx-auto brightness-0 invert mb-4" />
+          <img src={sikaLogo} alt="SikaCash" className="h-11 w-auto mx-auto drop-shadow-[0_2px_8px_rgba(255,255,255,0.3)] mb-4" />
           <h1 className="font-display text-2xl font-extrabold text-white">Welcome Back</h1>
           <p className="text-white/60 text-sm mt-1">Sign in to continue</p>
         </div>
