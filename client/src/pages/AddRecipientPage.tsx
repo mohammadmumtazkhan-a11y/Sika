@@ -91,10 +91,16 @@ export default function AddRecipientPage() {
   const search = useSearch();
   const p = new URLSearchParams(search);
 
-  const fromCcy  = p.get("from")     || "GBP";
-  const toCcy    = p.get("to")       || "NGN";
-  const amount   = p.get("amount")   || "100";
-  const delivery = p.get("delivery") || "bank_deposit";
+  const fromCcy    = p.get("from")     || "GBP";
+  const toCcy      = p.get("to")       || "NGN";
+  const amount     = p.get("amount")   || "100";
+  const delivery   = p.get("delivery") || "bank_deposit";
+  const isExisting = p.get("existing") === "1"; // existing recipient selected from list
+
+  /* ── Pre-fill from sessionStorage when editing an existing recipient ── */
+  const prefill = isExisting
+    ? (() => { try { return JSON.parse(sessionStorage.getItem("sika_recipient") || "{}"); } catch { return {}; } })()
+    : {};
 
   /* ── Amount calculations ──────────────────────────────── */
   const sendCur  = getCurrency(fromCcy);
@@ -116,14 +122,14 @@ export default function AddRecipientPage() {
 
   const isNGN = toCcy === "NGN";
 
-  /* ── Form state ──────────────────────────────────────── */
+  /* ── Form state — pre-filled & locked for existing recipients ── */
   const [form, setForm] = useState({
-    firstName:    "",
-    lastName:     "",
-    nickname:     "",
-    relationship: RELATIONSHIPS[0],
-    reason:       REASONS[0],
-    narration:    "",
+    firstName:    prefill.firstName    || "",
+    lastName:     prefill.lastName     || "",
+    nickname:     prefill.nickname     || "",
+    relationship: prefill.relationship || RELATIONSHIPS[0],
+    reason:       prefill.reason       || REASONS[0],
+    narration:    prefill.narration    || "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -166,9 +172,12 @@ export default function AddRecipientPage() {
           narration:    form.narration,
         })
       );
-      navigate(
-        `/dashboard/send/bank?from=${fromCcy}&to=${toCcy}&amount=${amount}&delivery=${delivery}`
-      );
+      // Existing recipient → bank details pre-filled & pre-verified
+      // New recipient → bank details blank, needs verification
+      const bankUrl = isExisting
+        ? `/dashboard/send/bank?from=${fromCcy}&to=${toCcy}&amount=${amount}&delivery=${delivery}&preVerified=1`
+        : `/dashboard/send/bank?from=${fromCcy}&to=${toCcy}&amount=${amount}&delivery=${delivery}`;
+      navigate(bankUrl);
     }, 600);
   };
 
@@ -269,10 +278,12 @@ export default function AddRecipientPage() {
                   <div className="flex items-start justify-between">
                   <div>
                     <h2 className="font-display font-semibold text-[#1E2A24] text-base">
-                      Recipient Details
+                      {isExisting ? "Verify Recipient Details" : "Recipient Details"}
                     </h2>
                     <p className="text-xs text-[#9AA6A0] mt-0.5">
-                      Tell us about who you're sending to
+                      {isExisting
+                        ? "Review the details and provide transfer information"
+                        : "Tell us about who you're sending to"}
                     </p>
                   </div>
                   {isNGN && (
@@ -289,25 +300,42 @@ export default function AddRecipientPage() {
                   {/* ── Personal info ──────────────────── */}
                   <div>
                     <SectionHeader icon={User} label="Personal Information" />
+                    {isExisting && (
+                      <div className="flex items-center gap-2 mb-3 bg-[#EEF7F1] border border-[#1FAF5A]/25 rounded-[8px] px-3 py-2">
+                        <Info className="w-3.5 h-3.5 text-[#1FAF5A] shrink-0" />
+                        <p className="text-xs text-[#5F6F68]">
+                          Recipient details are pre-filled from your saved contacts. Please verify and provide the transfer details below.
+                        </p>
+                      </div>
+                    )}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <FieldLabel label="First Name" required />
                         <input
                           type="text" value={form.firstName} onChange={set("firstName")}
-                          placeholder="First name" className={inputCls}
+                          placeholder="First name"
+                          disabled={isExisting}
+                          className={inputCls + (isExisting ? " bg-[#F8FAF9] text-[#5F6F68] cursor-not-allowed" : "")}
                         />
                       </div>
                       <div>
                         <FieldLabel label="Last Name" required />
                         <input
                           type="text" value={form.lastName} onChange={set("lastName")}
-                          placeholder="Last name" className={inputCls}
+                          placeholder="Last name"
+                          disabled={isExisting}
+                          className={inputCls + (isExisting ? " bg-[#F8FAF9] text-[#5F6F68] cursor-not-allowed" : "")}
                         />
                       </div>
                       <div>
                         <FieldLabel label="Relationship" required />
                         <SelectWrapper>
-                          <select value={form.relationship} onChange={set("relationship")} className={selectCls}>
+                          <select
+                            value={form.relationship}
+                            onChange={set("relationship")}
+                            disabled={isExisting}
+                            className={selectCls + (isExisting ? " bg-[#F8FAF9] text-[#5F6F68] cursor-not-allowed" : "")}
+                          >
                             {RELATIONSHIPS.map((r) => <option key={r}>{r}</option>)}
                           </select>
                         </SelectWrapper>
@@ -316,7 +344,9 @@ export default function AddRecipientPage() {
                         <FieldLabel label="Nickname" optional />
                         <input
                           type="text" value={form.nickname} onChange={set("nickname")}
-                          placeholder="e.g. My Brother" className={inputCls}
+                          placeholder="e.g. My Brother"
+                          disabled={isExisting}
+                          className={inputCls + (isExisting ? " bg-[#F8FAF9] text-[#5F6F68] cursor-not-allowed" : "")}
                         />
                       </div>
                     </div>

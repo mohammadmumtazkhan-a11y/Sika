@@ -116,7 +116,7 @@ export default function SelectRecipientPage() {
 
   /* ── Select recipient ────────────────────────────────── */
   const selectRecipient = (r: SavedRecipient) => {
-    // Pre-fill sessionStorage with existing recipient data
+    // Store selected recipient + bank data for pre-fill on the next pages
     sessionStorage.setItem(
       "sika_recipient",
       JSON.stringify({
@@ -124,7 +124,7 @@ export default function SelectRecipientPage() {
         lastName:     r.lastName,
         nickname:     r.firstName,
         relationship: r.relationship,
-        reason:       "Family Support",
+        reason:       "",
         narration:    "",
       })
     );
@@ -140,9 +140,10 @@ export default function SelectRecipientPage() {
         verified:  true,
       })
     );
-    // Navigate to bank step — pre-verified so user just reviews & continues
+    // Navigate to Recipient Details page for user to review pre-filled data
+    // and fill in Reason + Narration, then continue to Bank details
     navigate(
-      `/dashboard/send/bank?from=${fromCcy}&to=${toCcy}&amount=${amount}&delivery=${r.delivery}&preVerified=1`
+      `/dashboard/send/recipient/new?from=${fromCcy}&to=${toCcy}&amount=${amount}&delivery=${r.delivery}&existing=1`
     );
   };
 
