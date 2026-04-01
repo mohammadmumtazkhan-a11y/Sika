@@ -366,10 +366,9 @@ export default function MobilePayment() {
             toast.success("Transaction created! We'll notify you once payment is confirmed.");
             navigate("/m/dashboard");
           }}
-          className="w-full bg-[#1FAF5A] hover:bg-[#178A47] text-white font-bold py-3.5 h-12 rounded-[10px] text-base shadow-[0_4px_16px_rgba(31,175,90,0.3)]"
+          className="w-full bg-[#1FAF5A] hover:bg-[#178A47] text-white font-semibold py-3.5 h-auto min-h-[48px] rounded-[10px] text-sm shadow-[0_4px_16px_rgba(31,175,90,0.3)] px-4"
         >
-          I've noted the details — take me to Dashboard
-          <ArrowRight className="w-4 h-4 ml-1" />
+          Go to Dashboard
         </Button>
       </div>
     </MobileLayout>
