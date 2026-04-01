@@ -3,29 +3,55 @@
   "short_name": "SikaCash",
   "description": "Send money to your loved ones. Fast, secure, and affordable international transfers from the UK.",
   "start_url": "/m",
-  "scope": "/m",
+  "scope": "/",
+  "id": "/m",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#F8FAF9",
   "theme_color": "#1FAF5A",
   "categories": ["finance", "utilities"],
+  "lang": "en-GB",
+  "dir": "ltr",
+  "prefer_related_applications": false,
   "icons": [
     {
-      "src": "/icons/icon-192.svg",
+      "src": "/icons/icon-192.png",
       "sizes": "192x192",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "/icons/icon-512.svg",
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "/favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Send Money",
+      "short_name": "Send",
+      "url": "/m/send",
+      "description": "Start a new money transfer",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
     }
   ]
 }

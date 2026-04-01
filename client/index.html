@@ -7,13 +7,19 @@
     <meta name="description" content="Sika — Send money to your loved ones. Fast, secure, and affordable international transfers from the UK." />
     <title>Sika — International Money Transfer</title>
 
-    <!-- PWA -->
+    <!-- PWA — works on Safari (iOS), Chrome (Android/Desktop), Edge (Desktop) -->
     <link rel="manifest" href="/manifest.json" />
     <meta name="theme-color" content="#1FAF5A" />
+    <!-- iOS Safari -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="SikaCash" />
-    <link rel="apple-touch-icon" href="/icons/icon-192.svg" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+    <!-- Chrome / Edge / Android -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="SikaCash" />
+    <meta name="msapplication-TileColor" content="#1FAF5A" />
+    <meta name="msapplication-TileImage" content="/icons/icon-192.png" />
   </head>
   <body>
     <div id="root"></div>
