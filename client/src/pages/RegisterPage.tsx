@@ -53,7 +53,7 @@ export default function RegisterPage() {
   useEffect(() => { clearMitoFlow(); }, []);
   const search = useSearch();
   const params = new URLSearchParams(search);
-  const redirectPath = params.get("redirect") || "/kyc";
+  const redirectPath = params.get("redirect") || "/dashboard";
 
   const [form, setForm] = useState({
     firstName:    "",

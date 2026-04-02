@@ -15,7 +15,7 @@ export default function MobileVerifyEmail() {
   const search = useSearch();
   const params = new URLSearchParams(search);
   const email = params.get("email") || "your email";
-  const redirect = params.get("redirect") || "/m/kyc";
+  const redirect = params.get("redirect") || "/m/dashboard";
 
   const [otp, setOtp] = useState<string[]>(Array(OTP_LENGTH).fill(""));
   const [loading, setLoading] = useState(false);
