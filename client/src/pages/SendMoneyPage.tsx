@@ -1,6 +1,7 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useLocation, useSearch } from "wouter";
 import { motion } from "framer-motion";
+import { clearMitoFlow } from "@/components/MitoTransitionLoader";
 import {
   Building2,
   ArrowRight,
@@ -45,6 +46,7 @@ const DELIVERY_ICONS: Record<string, React.ElementType> = {
 
 export default function SendMoneyPage() {
   const [, navigate] = useLocation();
+  useEffect(() => { clearMitoFlow(); }, []);
   const search = useSearch();
   const params = new URLSearchParams(search);
 

@@ -1,5 +1,6 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useLocation } from "wouter";
+import { clearMitoFlow } from "@/components/MitoTransitionLoader";
 import { motion } from "framer-motion";
 import {
   Shield, Clock, ArrowRight, Globe, Zap, ChevronRight,
@@ -15,6 +16,7 @@ function getCurrency(code: string) {
 
 export default function MobileHome() {
   const [, navigate] = useLocation();
+  useEffect(() => { clearMitoFlow(); }, []);
   const [sendAmt, setSendAmt] = useState("100");
   const [sendCcy, setSendCcy] = useState("GBP");
   const [recvCcy, setRecvCcy] = useState("NGN");

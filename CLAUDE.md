@@ -2,10 +2,10 @@
 
 ## Context
 
-We at Mito.Money (a brand of Funtech Global Communications Ltd.) want to provide some of our services to Sika(owned by Africa Remittance Co LLC) The services will be white-labelled for Sika. sika is a retail money transfer responsive application operating in the United Kingdom using Mito.Money’s licence. We are building a world class professional, modern premium UI/UX and completely working prototype.
+We at Mito.Money (a brand of Funtech Global Communications Ltd.) want to provide some of our services to Sika(owned by Africa Remittance Co LLC) The services will be white-labelled for Sika. sika is a retail money transfer responsive application operating in the United Kingdom using Mito.Moneyï¿½s licence. We are building a world class professional, modern premium UI/UX and completely working prototype.
 
 The user/end-customer must register to use Sika.
-As a part of registration the end-user/Customer must verify his email following Rhemito’s Sign-up process.
+As a part of registration the end-user/Customer must verify his email following Rhemitoï¿½s Sign-up process.
 Live rates for currency-Country Corridors are provided to the customer and he can enter the desired amount to send.
 The End user must pass KYC before creating a Transaction.
 
@@ -38,10 +38,45 @@ Return/give TXN details via API to Sika for any customer or any specific TXN ID.
 Show wallet balances (if applicable) for customers
 Help Tickets support via API or widget
 Note: the countdown for transaction completion is 10 minutes. Mito.money will also create a customer based on the information received from Sika. The skia UID and Mito.money UID for customer will be maintained on both sides (Sika and Mito).
-##Display: Powered by ‘Mito.Money’ in partnership with Sika. On Pages controlled by Mito.Money.
+**Display:** "Powered by Mito.Money in partnership with Sika" badge on all Mito-controlled pages.
 
+**Mito Transition Loader:** A premium animated fullscreen overlay shown once per flow entry when the user navigates from a Sika page to a Mito-powered page. Displays FCA licence info (FRN 815146, Funtech Global Communications Ltd), shield badge, Sika-to-Mito logo handoff animation, and a progress bar. Uses `sessionStorage` (`mito_flow_active`) to show once per flow entry â€” resets when returning to Sika pages (Dashboard, MobileDashboard, MobileSendMoney).
 
+### Implemented Pages & Routes
 
+**Web Routes (desktop/responsive):**
+| Route | Page | Layout | Mito Loader |
+|-------|------|--------|-------------|
+| `/` | HomePage | Navbar + Footer | No |
+| `/send` | SendMoneyPage | Navbar + Footer | No |
+| `/login` | LoginPage | Standalone | No |
+| `/register` | RegisterPage | Standalone | No |
+| `/verify-email` | VerifyEmailPage | MitoLayout | Yes |
+| `/kyc` | MiniKYCPage | MitoLayout | Yes |
+| `/dashboard` | DashboardPage | DashboardLayout | No (clears flag) |
+| `/dashboard/send/recipient` | SelectRecipientPage | DashboardLayout | Yes |
+| `/dashboard/send/recipient/new` | AddRecipientPage | DashboardLayout | Yes |
+| `/dashboard/send/bank` | BankDetailsPage | DashboardLayout | Yes |
+| `/dashboard/send/summary` | SummaryPage | DashboardLayout | Yes |
+| `/dashboard/send/payment-methods` | PaymentMethodsPage | DashboardLayout | Yes |
+| `/dashboard/send/payment` | PaymentPage | DashboardLayout | Yes |
+
+**Mobile Routes (`/m` prefix):**
+| Route | Page | Mito Loader |
+|-------|------|-------------|
+| `/m` | MobileHome | No |
+| `/m/login` | MobileLogin | No |
+| `/m/register` | MobileRegister | No |
+| `/m/send` | MobileSendMoney | No (clears flag) |
+| `/m/verify-email` | MobileVerifyEmail | Yes |
+| `/m/kyc` | MobileKYC | Yes |
+| `/m/dashboard` | MobileDashboard | No (clears flag) |
+| `/m/dashboard/send/recipient` | MobileSelectRecipient | Yes |
+| `/m/dashboard/send/recipient/new` | MobileAddRecipient | Yes |
+| `/m/dashboard/send/bank` | MobileBankDetails | Yes |
+| `/m/dashboard/send/summary` | MobileSummary | Yes |
+| `/m/dashboard/send/payment-methods` | MobilePaymentMethods | Yes |
+| `/m/dashboard/send/payment` | MobilePayment | Yes |
 
 
 ### Supported Currencies & Countries
@@ -85,25 +120,48 @@ Note: the countdown for transaction completion is 10 minutes. Mito.money will al
 
 ```
 client/src/
-  components/ui/    # shadcn/ui primitives â€” add via CLI, do NOT edit manually
-  components/       # App-level shared components (modals, layout, etc.)
-  pages/            # Route page components
-  hooks/            # Custom React hooks (use-toast, use-mobile)
-  lib/queryClient.ts # apiRequest(), getQueryFn(), queryClient config
-  lib/utils.ts      # cn() utility (clsx + tailwind-merge)
-  data/             # Static data (knownSenders, payoutAccounts)
-  index.css         # Theme CSS variables and Tailwind base
-  App.tsx            # Root: ErrorBoundary â†’ QueryProvider â†’ Router
+  components/ui/              # shadcn/ui primitives â€” add via CLI, do NOT edit manually
+  components/
+    DashboardLayout.tsx       # Sidebar layout for dashboard pages (showMitoLoader prop)
+    MitoLayout.tsx            # Layout for Mito-branded pages (KYC, verify email)
+    MitoTransitionLoader.tsx  # FCA compliance transition overlay (createPortal to body)
+    Navbar.tsx                # Top navigation for public pages
+    Footer.tsx                # Footer with Mito.Money branding
+    TransferCalculator.tsx    # Interactive currency conversion widget
+    StatCounter.tsx           # Animated number counter
+    FeatureCard.tsx           # Feature display card
+    MobileAmountCard.tsx      # Mobile amount + rate-lock countdown card
+    MobileStepIndicator.tsx   # Mobile step progress indicator
+  pages/                      # Web route page components
+  pages/MobileApp/            # Mobile route page components
+    components/
+      MobileLayout.tsx        # Mobile wrapper with MobileTopBar + MobileBottomNav
+      MobileTopBar.tsx        # Mobile header bar
+      MobileBottomNav.tsx     # Mobile tab navigation with FAB
+  hooks/                      # Custom React hooks (use-toast, use-mobile)
+  lib/queryClient.ts          # apiRequest(), getQueryFn(), queryClient config
+  lib/utils.ts                # cn() utility (clsx + tailwind-merge)
+  data/
+    currencies.ts             # 16 currencies with mock exchange rates
+    countries.ts              # 16 countries with flags, currency mapping
+    deliveryMethods.ts        # Delivery methods per currency, payment methods
+  assets/                     # Logos (Sika Logo.png, Mito_logo.svg), PWA icons
+  index.css                   # Theme CSS variables and Tailwind base
+  App.tsx                     # Root: QueryProvider â†’ Router (wouter Switch/Route)
 
 server/
-  index.ts          # Express server entry point
-  routes.ts         # API route definitions
-  vite.ts           # Vite dev middleware integration
+  index.ts                    # Express server entry point (port 5000)
+  routes.ts                   # API route definitions
+  vite.ts                     # Vite dev middleware integration
 
 shared/
-  schema.ts         # Drizzle ORM schema + Zod insert schemas
+  schema.ts                   # Drizzle ORM schema + Zod insert schemas (users table)
 
-tests/e2e/          # Playwright E2E specs (.spec.js)
+public/
+  manifest.json               # PWA manifest (installable on iOS, Chrome, Edge)
+  sw.js                       # Service worker for PWA
+
+tests/e2e/                    # Playwright E2E specs (.spec.js)
 ```
 
 ## Path Aliases
@@ -163,6 +221,21 @@ All requests use `credentials: "include"` for session cookies.
 - Use `useToast()` from `@/hooks/use-toast` â€” Toaster is already mounted in App.tsx
 - Always show a toast after: form submissions, API errors, state changes
 
+### Mito Transition Loader
+- **Component:** `MitoTransitionLoader` in `components/MitoTransitionLoader.tsx`
+- Uses `createPortal(jsx, document.body)` â€” must portal to body, not render inside `#root` (z-index stacking issue)
+- **Flow tracking:** `sessionStorage` key `mito_flow_active` â€” shows once per flow entry
+- **Exported helper:** `clearMitoFlow()` â€” call on Sika pages to reset the flag
+- **Web integration:** `DashboardLayout` has `showMitoLoader` prop â€” set to `true` on Mito pages. When `false`, it auto-clears the flow flag.
+- **Mobile integration:** `<MitoTransitionLoader />` rendered directly in each mobile Mito page. `clearMitoFlow()` called in `MobileDashboard` and `MobileSendMoney`.
+- **MitoLayout integration:** Renders `<MitoTransitionLoader />` for `/verify-email` and `/kyc`
+
+### PWA
+- Manifest at `public/manifest.json` â€” installable on iOS (Add to Home Screen), Chrome, Edge
+- Service worker at `public/sw.js`, registered in `main.tsx`
+- App shortcuts: "Send Money" â†’ `/m/send`
+- Icons: 192x192 and 512x512 PNG with maskable support
+
 ## Theme
 
 ```?? SikaCash-Inspired Fintech Theme (Modernised)
@@ -212,11 +285,11 @@ o Icons (subtle use only)
 ? Primary Button
 * Background: #1FAF5A 
 * Text: #FFFFFF 
-* Border Radius: 8px – 12px 
+* Border Radius: 8px ï¿½ 12px 
 * Font Weight: Semi-bold 
 ?? Example:
-* “Send Money” 
-* “Continue” 
+* ï¿½Send Moneyï¿½ 
+* ï¿½Continueï¿½ 
 
 ? Primary Button (Hover)
 * Background: #178A47 
@@ -226,8 +299,8 @@ o Icons (subtle use only)
 * Border: 1px solid #1FAF5A 
 * Text: #1FAF5A 
 ?? Example:
-* “Back” 
-* “Cancel” 
+* ï¿½Backï¿½ 
+* ï¿½Cancelï¿½ 
 
 ? Disabled Button
 * Background: #D3D9D6 
@@ -272,7 +345,7 @@ Info
 7. ?? Card & Layout Style
 * Border Radius: 12px 
 * Shadow: 0 2px 8px rgba(0,0,0,0.05) 
-* Padding: 16px – 24px 
+* Padding: 16px ï¿½ 24px 
 * Clean spacing (important for fintech trust) 
 
 8. ?? Navigation Style

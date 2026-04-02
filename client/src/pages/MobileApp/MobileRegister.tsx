@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useSearch } from "wouter";
+import { clearMitoFlow } from "@/components/MitoTransitionLoader";
 import { motion } from "framer-motion";
 import { User, Mail, Phone, Lock, Eye, EyeOff, ArrowRight, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,7 @@ const iconBoxCls =
 
 export default function MobileRegister() {
   const [, navigate] = useLocation();
+  useEffect(() => { clearMitoFlow(); }, []);
   const search = useSearch();
   const redirect = new URLSearchParams(search).get("redirect") || "/m/dashboard";
 

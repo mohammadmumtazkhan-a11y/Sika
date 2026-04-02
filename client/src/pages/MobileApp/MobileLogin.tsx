@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useSearch } from "wouter";
+import { clearMitoFlow } from "@/components/MitoTransitionLoader";
 import { motion } from "framer-motion";
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,6 +10,7 @@ import { cn } from "@/lib/utils";
 
 export default function MobileLogin() {
   const [, navigate] = useLocation();
+  useEffect(() => { clearMitoFlow(); }, []);
   const search = useSearch();
   const params = new URLSearchParams(search);
   const fullRedirect = params.get("redirect") || "/m/dashboard";

@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useSearch } from "wouter";
 import { motion } from "framer-motion";
+import { clearMitoFlow } from "@/components/MitoTransitionLoader";
 import {
   User, Mail, Lock, Eye, EyeOff, Phone, Gift,
   Apple, Smartphone, Users, CheckCircle, Globe, ChevronDown,
@@ -49,6 +50,7 @@ function Field({
 
 export default function RegisterPage() {
   const [, navigate] = useLocation();
+  useEffect(() => { clearMitoFlow(); }, []);
   const search = useSearch();
   const params = new URLSearchParams(search);
   const redirectPath = params.get("redirect") || "/dashboard";

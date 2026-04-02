@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { useLocation } from "wouter";
 import { motion } from "framer-motion";
+import { clearMitoFlow } from "@/components/MitoTransitionLoader";
 import {
   Zap,
   Globe,
@@ -37,6 +39,7 @@ const cardVariant = {
 
 export default function HomePage() {
   const [, navigate] = useLocation();
+  useEffect(() => { clearMitoFlow(); }, []);
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });

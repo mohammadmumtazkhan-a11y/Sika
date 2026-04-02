@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useSearch } from "wouter";
 import { motion } from "framer-motion";
+import { clearMitoFlow } from "@/components/MitoTransitionLoader";
 import { Mail, Lock, Eye, EyeOff, Apple, Smartphone, Users, CheckCircle, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -15,6 +16,7 @@ const STATS = [
 
 export default function LoginPage() {
   const [, navigate] = useLocation();
+  useEffect(() => { clearMitoFlow(); }, []);
   const search = useSearch();
   const params = new URLSearchParams(search);
   // The `redirect` param is already a full path (possibly with its own query string)
