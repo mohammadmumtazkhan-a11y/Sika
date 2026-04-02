@@ -9,6 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import DashboardLayout from "@/components/DashboardLayout";
+import SikaReturnLoader from "@/components/SikaReturnLoader";
 import { CURRENCIES, MOCK_RATES, TRANSFER_FEES } from "@/data/currencies";
 import { DELIVERY_METHODS } from "@/data/deliveryMethods";
 import { cn } from "@/lib/utils";
@@ -94,6 +95,7 @@ export default function PaymentPage() {
   const [, navigate] = useLocation();
   const search = useSearch();
   const p = new URLSearchParams(search);
+  const [showReturn, setShowReturn] = useState(false);
 
   const fromCcy  = p.get("from")     || "GBP";
   const toCcy    = p.get("to")       || "NGN";
@@ -141,6 +143,7 @@ export default function PaymentPage() {
 
   return (
     <DashboardLayout showMitoLoader>
+      {showReturn && <SikaReturnLoader onComplete={() => navigate("/dashboard")} />}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
 
         {/* ── Page heading ──────────────────────────────── */}
@@ -440,7 +443,7 @@ export default function PaymentPage() {
               transition={{ duration: 0.35, delay: 0.2 }}
             >
               <button
-                onClick={() => navigate("/dashboard")}
+                onClick={() => setShowReturn(true)}
                 className="w-full group border border-[#DCE3DF] hover:border-[#1FAF5A]/50 bg-white hover:bg-[#F8FAF9] rounded-[14px] px-6 py-4 flex flex-col items-center transition-all duration-200"
               >
                 <span className="text-sm font-semibold text-[#1E2A24] group-hover:text-[#1FAF5A] transition-colors">
@@ -528,7 +531,7 @@ export default function PaymentPage() {
               {!expired && (
                 <div className="px-5 pb-5">
                   <Button
-                    onClick={() => navigate("/dashboard")}
+                    onClick={() => setShowReturn(true)}
                     className="w-full h-10 bg-[#1FAF5A] hover:bg-[#178A47] text-white font-semibold rounded-[8px] text-sm shadow-[0_3px_12px_rgba(31,175,90,0.2)] transition-all"
                   >
                     Go to Dashboard

@@ -13,6 +13,7 @@ import { CURRENCIES, MOCK_RATES, TRANSFER_FEES } from "@/data/currencies";
 import { DELIVERY_METHODS } from "@/data/deliveryMethods";
 import { cn } from "@/lib/utils";
 import MitoTransitionLoader from "@/components/MitoTransitionLoader";
+import SikaReturnLoader from "@/components/SikaReturnLoader";
 
 /* ─── Step definitions ──────────────────────────────────── */
 const FLOW_STEPS = [
@@ -58,6 +59,7 @@ export default function MobilePayment() {
   const [, navigate] = useLocation();
   const search = useSearch();
   const p = new URLSearchParams(search);
+  const [showReturn, setShowReturn] = useState(false);
 
   const fromCcy  = p.get("from")     || "GBP";
   const toCcy    = p.get("to")       || "NGN";
@@ -367,12 +369,13 @@ export default function MobilePayment() {
         <Button
           onClick={() => {
             toast.success("Transaction created! We'll notify you once payment is confirmed.");
-            navigate("/m/dashboard");
+            setShowReturn(true);
           }}
           className="w-full bg-[#1FAF5A] hover:bg-[#178A47] text-white font-semibold py-3.5 h-auto min-h-[48px] rounded-[10px] text-sm shadow-[0_4px_16px_rgba(31,175,90,0.3)] px-4"
         >
           Go to Dashboard
         </Button>
+        {showReturn && <SikaReturnLoader onComplete={() => navigate("/m/dashboard")} />}
       </div>
     </MobileLayout>
     </>

@@ -1,36 +1,25 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
-import { ShieldCheck, ChevronRight } from "lucide-react";
+import { ShieldCheck, ChevronLeft } from "lucide-react";
 import sikaLogo from "@/assets/Sika Logo.png";
 import mitoLogo from "@/assets/Mito_logo.svg";
 
-interface MitoTransitionLoaderProps {
-  duration?: number; // ms the overlay stays fully visible before fading
+interface SikaReturnLoaderProps {
+  duration?: number;
+  onComplete: () => void;
 }
 
-const FLOW_KEY = "mito_flow_active";
-
-/** Call this on non-Mito pages to reset the flag so the loader shows again on next entry */
-export function clearMitoFlow() {
-  try { sessionStorage.removeItem(FLOW_KEY); } catch {}
-}
-
-export default function MitoTransitionLoader({ duration = 3600 }: MitoTransitionLoaderProps) {
-  // Skip if already inside the Mito flow
-  const alreadyInFlow = (() => {
-    try { return sessionStorage.getItem(FLOW_KEY) === "true"; } catch { return false; }
-  })();
-
+export default function SikaReturnLoader({ duration = 3600, onComplete }: SikaReturnLoaderProps) {
   const [opacity, setOpacity] = useState(1);
-  const [gone, setGone] = useState(alreadyInFlow);
+  const [gone, setGone] = useState(false);
 
   useEffect(() => {
-    if (alreadyInFlow) return;
-    // Mark that we're in the Mito flow
-    try { sessionStorage.setItem(FLOW_KEY, "true"); } catch {}
     const fadeTimer = setTimeout(() => setOpacity(0), duration);
-    const removeTimer = setTimeout(() => setGone(true), duration + 700);
+    const removeTimer = setTimeout(() => {
+      setGone(true);
+      onComplete();
+    }, duration + 700);
     return () => {
       clearTimeout(fadeTimer);
       clearTimeout(removeTimer);
@@ -120,45 +109,45 @@ export default function MitoTransitionLoader({ duration = 3600 }: MitoTransition
           </div>
         </motion.div>
 
-        {/* Logo handoff row */}
+        {/* Logo handoff row: Sika ◀◀◀ Mito (arrows flow from Mito to Sika) */}
         <div style={{ display: "flex", alignItems: "center", gap: 14, justifyContent: "center" }}>
-          {/* Sika card */}
+          {/* Sika card (destination — left side, pulsing) */}
           <motion.div
             style={{ width: 72, height: 72, borderRadius: 16, background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.25)", display: "flex", alignItems: "center", justifyContent: "center", padding: 10, boxShadow: "0 8px 32px rgba(0,0,0,0.5)", flexShrink: 0 }}
             initial={{ x: -50, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: 0.2, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
-            <img src={sikaLogo} alt="SikaCash" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+            <motion.img
+              src={sikaLogo}
+              alt="SikaCash"
+              style={{ width: "100%", height: "100%", objectFit: "contain" }}
+              animate={{ scale: [1, 1.07, 1] }}
+              transition={{ delay: 1.0, duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+            />
           </motion.div>
 
-          {/* Chevrons */}
+          {/* Chevrons flowing RIGHT-to-LEFT (from Mito toward Sika) */}
           <div style={{ display: "flex", alignItems: "center", gap: 2 }}>
             {[0, 0.2, 0.4].map((delay, i) => (
               <motion.div
                 key={i}
-                animate={{ opacity: [0, 1, 0], x: [-5, 0, 5] }}
+                animate={{ opacity: [0, 1, 0], x: [6, 0, -6] }}
                 transition={{ duration: 1.1, delay, repeat: Infinity, ease: "easeInOut" }}
               >
-                <ChevronRight style={{ width: i === 1 ? 22 : 15, height: i === 1 ? 22 : 15, color: "#1FAF5A" }} />
+                <ChevronLeft style={{ width: i === 1 ? 22 : 15, height: i === 1 ? 22 : 15, color: "#1FAF5A" }} />
               </motion.div>
             ))}
           </div>
 
-          {/* Mito card */}
+          {/* Mito card (source — right side) */}
           <motion.div
             style={{ width: 72, height: 72, borderRadius: 16, background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.25)", display: "flex", alignItems: "center", justifyContent: "center", padding: 10, boxShadow: "0 8px 32px rgba(0,0,0,0.5)", flexShrink: 0 }}
             initial={{ x: 50, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: 0.45, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
-            <motion.img
-              src={mitoLogo}
-              alt="Mito.Money"
-              style={{ width: "100%", height: "100%", objectFit: "contain", filter: "brightness(0) invert(1)" }}
-              animate={{ scale: [1, 1.07, 1] }}
-              transition={{ delay: 1.0, duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-            />
+            <img src={mitoLogo} alt="Mito.Money" style={{ width: "100%", height: "100%", objectFit: "contain", filter: "brightness(0) invert(1)" }} />
           </motion.div>
         </div>
 
@@ -170,16 +159,16 @@ export default function MitoTransitionLoader({ duration = 3600 }: MitoTransition
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.65, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           >
-            Connecting to Mito.Money
+            Returning to SikaCash
           </motion.p>
 
           <motion.p
-            style={{ fontSize: 13, color: "rgba(255,255,255,0.62)", maxWidth: 270, lineHeight: 1.65, margin: 0, fontFamily: "Inter, sans-serif" }}
+            style={{ fontSize: 13, color: "rgba(255,255,255,0.62)", maxWidth: 280, lineHeight: 1.65, margin: 0, fontFamily: "Inter, sans-serif" }}
             initial={{ y: 14, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.8, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           >
-            Loading our licensed partner to securely process your transaction
+            Your transaction has been submitted for processing by our licensed partner
           </motion.p>
 
           {/* FCA badge */}
