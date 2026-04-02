@@ -30,13 +30,19 @@ Sika (owned by Africa Remittance Co LLC) is a retail money transfer application 
 | Help Tickets | — | — | Planned |
 | Account Settings | — | — | Planned |
 
-### 3.2 Mito.Money-Controlled Pages
+### 3.2 Sika-Controlled (Mito-Branded) Pages
+Display: "Managed and Powered by SikaCash" badge. No transition loader.
+
+| Feature | Web Route | Mobile Route | Status |
+|---------|-----------|--------------|--------|
+| Email Verification (OTP) | `/verify-email` | `/m/verify-email` | Done |
+
+### 3.3 Mito.Money-Controlled Pages
 Display: "Powered by Mito.Money in partnership with Sika" badge.
 Transition loader shows once per flow entry from Sika pages.
 
 | Feature | Web Route | Mobile Route | Status |
 |---------|-----------|--------------|--------|
-| Email Verification (OTP) | `/verify-email` | `/m/verify-email` | Done |
 | Mini KYC | `/kyc` | `/m/kyc` | Done |
 | Full KYC (ID + selfie) | — | — | Planned |
 | Select Recipient | `/dashboard/send/recipient` | `/m/dashboard/send/recipient` | Done |
@@ -56,10 +62,9 @@ Transition loader shows once per flow entry from Sika pages.
 1. User visits Homepage → clicks Register
 2. Fills registration form (first name, last name, email, mobile, password, country)
 3. Redirected to Email Verification → enters 6-digit OTP (60s resend timer)
-4. Redirected to Mini KYC → enters personal details and address
-5. Lands on Dashboard
+4. Lands on Dashboard (KYC is NOT part of registration — it triggers on first send)
 
-**Mito Transition Loader:** Shows when entering verify-email (step 3) from registration.
+**Mito Transition Loader:** Does NOT show during registration or email verification. Email verification is part of Sika's registration flow.
 
 ### 4.2 Login
 1. User enters email and password
@@ -67,22 +72,46 @@ Transition loader shows once per flow entry from Sika pages.
 3. Social login buttons displayed (future integration)
 4. Redirected to Dashboard on success
 
-### 4.3 Send Money (5-Step Flow)
-1. **Amount & Delivery** — Select send/receive currencies, enter amount, view live FX rate (locked 15 min), choose delivery method
-2. **Select Recipient** — Pick from saved recipients (with search/filter) or add new
-3. **Bank/Delivery Details** — Enter recipient's bank account, mobile money, or cash pickup details (fields vary by country)
-4. **Summary** — Review transaction: amount, fees, total, recipient details, exchange rate. Edit capability.
-5. **Payment** — Select payment method (debit card, bank transfer, credit card) → process payment → confirmation
+### 4.3 Send Money Flow
+
+#### 4.3.1 New Customer (first transaction, KYC not done)
+1. **Amount & Delivery** — Select currencies, enter amount, view live FX rate (locked 15 min), choose delivery method
+2. **Mini KYC** — Identity verification (triggered automatically on Continue). Transition loader shows before this step.
+3. **Add Recipient** — New recipient form (skips recipient list since no saved recipients exist)
+4. **Bank/Delivery Details** — Enter recipient's bank account, mobile money, or cash pickup details
+5. **Summary** — Review transaction: amount, fees, total, recipient details, exchange rate
+6. **Payment** — Select payment method → process payment → confirmation
+
+#### 4.3.2 Existing Customer (KYC already done)
+1. **Amount & Delivery** — Same as above
+2. **Select Recipient** — Pick from saved recipients (search/filter) or add new. Transition loader shows before this step.
+3. **Bank/Delivery Details** — Enter or confirm recipient details
+4. **Summary** — Review transaction
+5. **Payment** — Select payment method → process payment → confirmation
 
 **Transaction Completion Countdown:** 10 minutes from rate lock.
-**Mito Transition Loader:** Shows once when entering step 2 (Select Recipient) from Dashboard.
+**Mito Transition Loader:** Shows once per flow entry — before Mini KYC (new customer) or before Select Recipient (existing customer).
+**New Customer Detection:** `sika_new_user` sessionStorage flag; `sika_kyc_done` flag tracks KYC completion.
 
 ### 4.4 KYC (Know Your Customer)
-**Mini KYC (required before first transaction):**
-- Country, First Name, Last Name, Date of Birth
-- Address Line 1 (mandatory), Address Line 2 (optional)
-- City, PIN/ZIP/POST Code
-- Phone (optional)
+**Mini KYC (required before first transaction, NOT during registration):**
+- Triggered when user clicks "Continue" on Send Money page and `sika_kyc_done` is not set
+- After KYC completion, user is redirected to Add Recipient form with corridor params preserved
+- Web and mobile versions are feature-identical (section headers, field icons, hints, validation)
+
+**Mini KYC Form Fields:**
+- Country (with Globe icon, required, auto-filled from registration)
+- First Name, Last Name (with User icon, required, auto-filled)
+- Date of Birth (with Calendar icon, required, 18+ validation with hint)
+- Phone (with Phone icon, optional, auto-filled)
+- Address Line 1 (with MapPin icon, required)
+- Address Line 2 (with MapPin icon, optional)
+- City (with MapPin icon, required)
+- Postcode/ZIP (with MapPin icon, required, with format hint)
+
+**Section Headers:** "PERSONAL DETAILS" and "ADDRESS" dark headers with icons (both web and mobile)
+**Mito.Money Badge:** Animated "Powered by Mito.Money in partnership with Sika" badge
+**Info Banner:** "Why do we need this?" — FCA regulation explanation
 
 **Full KYC (triggered when threshold reached):**
 - ID document upload
@@ -103,9 +132,23 @@ Transition loader shows once per flow entry from Sika pages.
 
 **Behavior:**
 - Shows for 2.6 seconds + 0.7s fade-out
-- Shows once per flow entry (tracked via `sessionStorage`)
-- Resets when user returns to a Sika page (Dashboard, MobileDashboard, MobileSendMoney)
+- Shows once per flow entry (tracked via `sessionStorage` key `mito_flow_active`)
+- Resets when user returns to ANY Sika page (HomePage, LoginPage, RegisterPage, SendMoneyPage, DashboardPage, MobileHome, MobileLogin, MobileRegister, MobileSendMoney, MobileDashboard)
+- Does NOT show on VerifyEmailPage (email verification is Sika's registration flow)
 - Uses `createPortal` to `document.body` for reliable z-index stacking
+
+### 4.6 Session Flags & Flow Control
+
+| Flag | Set By | Cleared By | Purpose |
+|------|--------|------------|---------|
+| `sika_new_user` | VerifyEmailPage after OTP | LoginPage (existing users) | Distinguishes new vs existing customer |
+| `sika_kyc_done` | MiniKYCPage after submit; LoginPage for returning users | — | Tracks whether KYC is complete; gates Send Money flow |
+| `sika_reg` | RegisterPage | MiniKYCPage after submit | Carries registration data for KYC auto-fill (country, name, phone) |
+| `mito_flow_active` | MitoTransitionLoader on show | All Sika pages via `clearMitoFlow()` | Prevents duplicate transition loader within same flow |
+| `sika_recipient` | SelectRecipientPage on selection | — | Passes recipient data to AddRecipientPage |
+| `sika_bank` | SelectRecipientPage on selection | — | Passes bank data to BankDetailsPage |
+
+**New Customer Recipient Bypass:** When `sika_new_user === "1"`, SelectRecipientPage and MobileSelectRecipient auto-redirect to AddRecipientPage (skip empty recipient list).
 
 ---
 
@@ -117,10 +160,11 @@ Used on: HomePage, SendMoneyPage
 - Footer: Company links, services, support, legal, social media, Mito.Money branding
 
 ### 5.2 MitoLayout (Registration/KYC Flow)
-Used on: VerifyEmailPage, MiniKYCPage
+Used on: VerifyEmailPage (no loader), MiniKYCPage (with loader)
 - Header: Sika logo + "Powered by Mito.Money in partnership with Sika" badge
 - Step progress bar (configurable steps)
 - Green gradient page heading
+- `showMitoLoader` prop (default true) — set to false on VerifyEmailPage
 - Footer: Mito.Money branding, SSL/VISA/Mastercard badges
 
 ### 5.3 DashboardLayout (Authenticated Pages)
