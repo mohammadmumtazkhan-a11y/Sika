@@ -15,6 +15,7 @@ interface MitoLayoutProps {
   title: string;
   subtitle?: string;
   hideFooter?: boolean;
+  showMitoLoader?: boolean;
 }
 
 export default function MitoLayout({
@@ -24,12 +25,13 @@ export default function MitoLayout({
   title,
   subtitle,
   hideFooter,
+  showMitoLoader = true,
 }: MitoLayoutProps) {
   const [, navigate] = useLocation();
 
   return (
     <>
-      <MitoTransitionLoader />
+      {showMitoLoader && <MitoTransitionLoader />}
       <div className="min-h-screen bg-[#F8FAF9] flex flex-col">
       {/* ── Top bar ──────────────────────────────────────── */}
       <header className="bg-white border-b border-[#E5ECE8] shadow-sm">

@@ -88,6 +88,7 @@ export default function VerifyEmailPage() {
 
   return (
     <MitoLayout
+      showMitoLoader={false}
       steps={STEPS}
       currentStep={2}
       title="Verify Your Email"

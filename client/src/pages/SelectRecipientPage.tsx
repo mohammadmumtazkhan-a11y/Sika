@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useLocation, useSearch } from "wouter";
 import { motion } from "framer-motion";
 import {
@@ -78,6 +78,13 @@ export default function SelectRecipientPage() {
   const toCcy    = p.get("to")       || "NGN";
   const amount   = p.get("amount")   || "100";
   const delivery = p.get("delivery") || "bank_deposit";
+
+  // New customers have no saved recipients — go straight to add form
+  useEffect(() => {
+    if (sessionStorage.getItem("sika_new_user") === "1") {
+      navigate(`/dashboard/send/recipient/new?from=${fromCcy}&to=${toCcy}&amount=${amount}&delivery=${delivery}`);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   /* ── Amount calculations ──────────────────────────────── */
   const sendCur  = getCurrency(fromCcy);

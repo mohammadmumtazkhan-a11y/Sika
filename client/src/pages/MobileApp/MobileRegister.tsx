@@ -18,7 +18,7 @@ export default function MobileRegister() {
   const [, navigate] = useLocation();
   useEffect(() => { clearMitoFlow(); }, []);
   const search = useSearch();
-  const redirect = new URLSearchParams(search).get("redirect") || "/m/dashboard";
+  const redirect = new URLSearchParams(search).get("redirect") || "/m/kyc";
 
   const [form, setForm] = useState({ firstName: "", lastName: "", email: "", mobile: "", password: "", confirmPw: "", country: "United Kingdom" });
   const [showPw, setShowPw] = useState(false);

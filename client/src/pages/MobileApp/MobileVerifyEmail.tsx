@@ -15,7 +15,7 @@ export default function MobileVerifyEmail() {
   const search = useSearch();
   const params = new URLSearchParams(search);
   const email = params.get("email") || "your email";
-  const redirect = params.get("redirect") || "/m/dashboard";
+  const redirect = params.get("redirect") || "/m/kyc";
 
   const [otp, setOtp] = useState<string[]>(Array(OTP_LENGTH).fill(""));
   const [loading, setLoading] = useState(false);
@@ -66,7 +66,6 @@ export default function MobileVerifyEmail() {
 
   return (
     <>
-      <MitoTransitionLoader />
       <div className="min-h-screen bg-[#F8FAF9] flex justify-center">
       <div className="w-full max-w-[430px] min-h-screen bg-white flex flex-col">
 
