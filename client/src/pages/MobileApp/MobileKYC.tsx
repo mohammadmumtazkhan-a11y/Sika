@@ -5,6 +5,7 @@ import { Globe, User, Calendar, MapPin, Phone, ArrowRight, Info, Landmark } from
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import MobileLayout from "./components/MobileLayout";
+import MitoTransitionLoader from "@/components/MitoTransitionLoader";
 
 const COUNTRIES = [
   "United Kingdom", "United States", "Canada", "Australia",
@@ -53,7 +54,9 @@ export default function MobileKYC() {
   const maxDob = new Date(new Date().getFullYear() - 18, new Date().getMonth(), new Date().getDate()).toISOString().split("T")[0];
 
   return (
-    <MobileLayout title="Identity Verification" showBack showBottomNav={false}>
+    <>
+      <MitoTransitionLoader />
+      <MobileLayout title="Identity Verification" showBack showBottomNav={false}>
       <div className="px-4 py-4 space-y-4">
 
         {/* Mito.Money badge */}
@@ -106,5 +109,6 @@ export default function MobileKYC() {
         </form>
       </div>
     </MobileLayout>
+    </>
   );
 }

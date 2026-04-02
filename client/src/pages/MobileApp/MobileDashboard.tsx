@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
+import { clearMitoFlow } from "@/components/MitoTransitionLoader";
 import { motion } from "framer-motion";
 import {
   Send, Phone, Download, ArrowUpRight, ArrowDownLeft,
@@ -71,6 +72,9 @@ export default function MobileDashboard() {
   const [, navigate] = useLocation();
   const [isNewUser, setIsNewUser] = useState(false);
   const [userName, setUserName] = useState("Olayinka");
+
+  // Reset Mito flow flag so loader shows again on next entry
+  useEffect(() => { clearMitoFlow(); }, []);
 
   useEffect(() => {
     const newUser = sessionStorage.getItem("sika_new_user") === "1";

@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
+import MitoTransitionLoader, { clearMitoFlow } from "./MitoTransitionLoader";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard, SendHorizonal, ArrowDownLeft, ShieldCheck,
@@ -59,6 +60,7 @@ const BOTTOM_ITEMS: NavItem[] = [
 interface DashboardLayoutProps {
   children: React.ReactNode;
   userName?: string;
+  showMitoLoader?: boolean;
 }
 
 function NavLink({
@@ -145,10 +147,15 @@ function NavLink({
   );
 }
 
-export default function DashboardLayout({ children, userName = "User" }: DashboardLayoutProps) {
+export default function DashboardLayout({ children, userName = "User", showMitoLoader = false }: DashboardLayoutProps) {
   const [location, navigate] = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [notifCount] = useState(3);
+
+  // Clear Mito flow flag when on a non-Mito page (e.g. Dashboard overview)
+  useEffect(() => {
+    if (!showMitoLoader) clearMitoFlow();
+  }, [showMitoLoader]);
 
   const initials = userName
     .split(" ")
@@ -192,8 +199,9 @@ export default function DashboardLayout({ children, userName = "User" }: Dashboa
     </div>
   );
 
-  return (
-    <div className="flex h-screen bg-[#F8FAF9] overflow-hidden">
+  return (<>
+      {showMitoLoader && <MitoTransitionLoader />}
+      <div className="flex h-screen bg-[#F8FAF9] overflow-hidden">
       {/* ── Desktop sidebar ──────────────────────────────── */}
       <aside className="hidden lg:flex flex-col w-56 bg-white border-r border-[#E5ECE8] shrink-0">
         <SidebarContent />
@@ -267,5 +275,5 @@ export default function DashboardLayout({ children, userName = "User" }: Dashboa
         </main>
       </div>
     </div>
-  );
+  </>);
 }

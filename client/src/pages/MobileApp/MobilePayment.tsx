@@ -1,4 +1,3 @@
-import { useState, useEffect, useMemo } from "react";
 import { useLocation, useSearch } from "wouter";
 import { motion } from "framer-motion";
 import {
@@ -12,6 +11,7 @@ import MobileStepIndicator from "./components/MobileStepIndicator";
 import { CURRENCIES, MOCK_RATES, TRANSFER_FEES } from "@/data/currencies";
 import { DELIVERY_METHODS } from "@/data/deliveryMethods";
 import { cn } from "@/lib/utils";
+import MitoTransitionLoader from "@/components/MitoTransitionLoader";
 
 /* ─── Step definitions ──────────────────────────────────── */
 const FLOW_STEPS = [
@@ -124,6 +124,8 @@ export default function MobilePayment() {
   const offset = CIRCUMFERENCE * (1 - fraction);
 
   return (
+    <>
+    <MitoTransitionLoader />
     <MobileLayout
       title="Payment"
       showBack
@@ -372,5 +374,6 @@ export default function MobilePayment() {
         </Button>
       </div>
     </MobileLayout>
+    </>
   );
 }

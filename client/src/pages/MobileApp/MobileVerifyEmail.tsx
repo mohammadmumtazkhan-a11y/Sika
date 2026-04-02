@@ -5,6 +5,7 @@ import { Mail, ArrowRight, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import sikaLogo from "@/assets/Sika Logo.png";
+import MitoTransitionLoader from "@/components/MitoTransitionLoader";
 
 const OTP_LENGTH = 6;
 const RESEND_SECONDS = 60;
@@ -64,7 +65,9 @@ export default function MobileVerifyEmail() {
   const isComplete = otp.every(Boolean);
 
   return (
-    <div className="min-h-screen bg-[#F8FAF9] flex justify-center">
+    <>
+      <MitoTransitionLoader />
+      <div className="min-h-screen bg-[#F8FAF9] flex justify-center">
       <div className="w-full max-w-[430px] min-h-screen bg-white flex flex-col">
 
         {/* Header */}
@@ -150,5 +153,7 @@ export default function MobileVerifyEmail() {
         </motion.div>
       </div>
     </div>
+    </>
   );
 }
+

@@ -1,5 +1,6 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useLocation, useSearch } from "wouter";
+import { clearMitoFlow } from "@/components/MitoTransitionLoader";
 import { motion } from "framer-motion";
 import { ArrowRight, Clock, Building2, Smartphone, PackageOpen, Banknote } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -18,6 +19,9 @@ const DELIVERY_ICONS: Record<string, React.ElementType> = {
 export default function MobileSendMoney() {
   const [, navigate] = useLocation();
   const search = useSearch();
+
+  // Reset Mito flow flag so loader shows again on next entry
+  useEffect(() => { clearMitoFlow(); }, []);
   const p = new URLSearchParams(search);
 
   const [sendAmt, setSendAmt] = useState(p.get("amount") || "100");

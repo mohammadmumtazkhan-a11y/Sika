@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { useLocation, useSearch } from "wouter";
 import { motion } from "framer-motion";
 import {
@@ -12,6 +11,7 @@ import MobileAmountCard from "./components/MobileAmountCard";
 import { CURRENCIES, MOCK_RATES, TRANSFER_FEES } from "@/data/currencies";
 import { DELIVERY_METHODS } from "@/data/deliveryMethods";
 import { cn } from "@/lib/utils";
+import MitoTransitionLoader from "@/components/MitoTransitionLoader";
 
 /* ─── Step definitions ──────────────────────────────────── */
 const FLOW_STEPS = [
@@ -144,6 +144,8 @@ export default function MobileAddRecipient() {
   const urlParams = `from=${fromCcy}&to=${toCcy}&amount=${amount}&delivery=${delivery}`;
 
   return (
+    <>
+    <MitoTransitionLoader />
     <MobileLayout
       title={isExisting ? "Verify Recipient Details" : "Recipient Details"}
       showBack
@@ -348,5 +350,6 @@ export default function MobileAddRecipient() {
         </div>
       </div>
     </MobileLayout>
+    </>
   );
 }

@@ -150,7 +150,7 @@ export default function SelectRecipientPage() {
   const urlParams = `from=${fromCcy}&to=${toCcy}&amount=${amount}&delivery=${delivery}`;
 
   return (
-    <DashboardLayout>
+    <DashboardLayout showMitoLoader>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
 
         {/* ── Page heading ──────────────────────────────── */}

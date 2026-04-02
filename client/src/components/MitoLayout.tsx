@@ -1,6 +1,7 @@
 import { useLocation } from "wouter";
 import sikaLogo from "@/assets/Sika Logo.png";
 import mitoLogo from "@/assets/Mito_logo.svg";
+import MitoTransitionLoader from "./MitoTransitionLoader";
 
 interface Step {
   number: number;
@@ -27,7 +28,9 @@ export default function MitoLayout({
   const [, navigate] = useLocation();
 
   return (
-    <div className="min-h-screen bg-[#F8FAF9] flex flex-col">
+    <>
+      <MitoTransitionLoader />
+      <div className="min-h-screen bg-[#F8FAF9] flex flex-col">
       {/* ── Top bar ──────────────────────────────────────── */}
       <header className="bg-white border-b border-[#E5ECE8] shadow-sm">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
@@ -139,5 +142,6 @@ export default function MitoLayout({
         </div>
       </footer>}
     </div>
+    </>
   );
 }
